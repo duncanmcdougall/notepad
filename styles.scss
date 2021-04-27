@@ -1,0 +1,13 @@
+@import "./node_modules/modern-css-reset/dist/reset.css";
+
+:root {
+  --bg: #ffe;
+  --color: #224;
+}
+
+body {
+  background: var(--bg);
+  color: var(--color);
+  font-family: Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;
+  padding: 1rem;
+}
