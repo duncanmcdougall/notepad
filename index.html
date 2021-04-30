@@ -1,14 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tool</title>
-  <link rel="stylesheet" href="./styles.scss">
-</head>
-<body>
-<body>
-  <h1>Prototype</h1>
-  <script src="./script.ts"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notepad</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.scss" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📑</text></svg>">
+  </head>
+  <body>
+    <textarea name="editor" id="editor" autofocus placeholder="Start typing your note here..."></textarea>
+    <small id="lastModified"></small>
+    <nav class="sidebar">
+      <div id="noteBtns" class="notes">
+      </div>
+      <button id="addNoteBtn">➕ Add Note</button>
+    </div>
+    <script src="./script.ts"></script>
+  </body>
 </html>

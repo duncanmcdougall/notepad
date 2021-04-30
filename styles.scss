@@ -1,13 +1,132 @@
 @import "./node_modules/modern-css-reset/dist/reset.css";
 
 :root {
-  --bg: #ffe;
-  --color: #224;
+  --bg: #222;
+  --color: #f0f0f0;
+  --highlight: #ea9639;
+}
+
+html {
+  font-size: 18px;
 }
 
 body {
   background: var(--bg);
   color: var(--color);
-  font-family: Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;
+  font-family: "JetBrains Mono", monospace;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  overflow-x: hidden;
+}
+
+body, textarea {
+  scrollbar-width: thin;
+  scrollbar-color: #aaa var(--bg);
+
+  &::-webkit-scrollbar {
+    width: 16px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--bg)
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #aaa;
+    border-radius: 16px;
+    border: 4px solid var(--bg)
+  }
+}
+
+textarea {
+  display: block;
+  background: transparent;
+  color: inherit;
+  font-size: 1rem;
+  border: none;
+  overflow: auto;
+  width: 100%;
+  resize: none;
   padding: 1rem;
+  flex: auto;
+  caret-color: var(--highlight);
+
+  &:focus {
+    outline: none;
+  }
+}
+
+button {
+  cursor: pointer;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-left: 3px solid transparent;
+  padding: 1rem;
+  color: inherit;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+
+  &:hover,
+  &:focus {
+    background: #444;
+  }
+
+  &.active {
+    border-left-color: var(--highlight);
+  }
+}
+
+.sidebar {
+  border-left: 1px solid #666;
+  width: 200px;
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+.notes {
+  button {
+    border-bottom: 1px solid #666;
+    text-align: left;
+
+    &:first-child {
+      border-top: none;
+    }
+
+    &:last-child {
+      border-bottom: 1px solid #666;
+    }
+  }
+}
+
+#addNoteBtn {
+  text-transform: uppercase;
+  background-color: orange;
+  color: #222;
+  font-weight: 700;
+}
+
+#lastModified {
+  pointer-events: none;
+  color: #777;
+  white-space: nowrap;
+  position: fixed;
+  bottom: 1rem;
+  right: calc(200px + 1rem);
+  z-index: -1;
+}
+
+@media print {
+  body, textarea {
+    padding: 0;
+    margin: 0;
+  }
+
+  .sidebar, #lastModified {
+    display: none;
+  }
 }
