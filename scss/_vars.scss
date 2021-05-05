@@ -1,0 +1,17 @@
+:root {
+  --bg: #222;
+  --color: #f0f0f0;
+  --highlight: #ea9639;
+  --footer: #000;
+  --button-hover: #444;
+  --action-btns: #444;
+  --separator: #444;
+}
+
+[data-theme="light"] {
+  --bg: #fff;
+  --color: #222;
+  --button-hover: #ccc;
+  --footer: #fff;
+  --action-btns: #eee;
+}

@@ -3,23 +3,102 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#222222" />
     <title>Notepad</title>
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link
+      id="fontSS"
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.scss" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📑</text></svg>">
+    <link rel="stylesheet" href="./scss/styles.scss" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="./logo192.png" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📑</text></svg>"
+    />
   </head>
   <body>
-    <textarea name="editor" id="editor" autofocus placeholder="Start typing your note here..."></textarea>
-    <small id="lastModified"></small>
-    <nav class="sidebar">
-      <div id="noteBtns" class="notes">
+    <div class="grid">
+      <div class="action-bar">
+        <small id="lastModified"></small>
+        <button
+          id="navToggleBtn"
+          class="icon-button action-bar__button action-bar__button--nav-toggle"
+        >
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M8 48H56V42.6667H8V48ZM8 34.6667H56V29.3333H8V34.6667ZM8 16V21.3333H56V16H8Z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+
+        <button id="backBtn" class="icon-button action-bar__button action-bar__button--back">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M53.3333 29.3333H20.88L35.7867 14.4267L32 10.6667L10.6667 32L32 53.3333L35.76 49.5733L20.88 34.6667H53.3333V29.3333Z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+
+        <button
+          id="deleteNoteBtn"
+          class="icon-button action-bar__button action-bar__button--delete"
+        >
+          <span>Delete Note</span>
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M16 50.6667C16 53.6 18.4 56 21.3333 56H42.6667C45.6 56 48 53.6 48 50.6667V18.6667H16V50.6667ZM22.56 31.68L26.32 27.92L32 33.5733L37.6533 27.92L41.4133 31.68L35.76 37.3333L41.4133 42.9867L37.6533 46.7467L32 41.0933L26.3467 46.7467L22.5867 42.9867L28.24 37.3333L22.56 31.68ZM41.3333 10.6667L38.6667 8H25.3333L22.6667 10.6667H13.3333V16H50.6667V10.6667H41.3333Z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+
+        <button
+          id="downloadNoteBtn"
+          class="icon-button action-bar__button action-bar__button--download"
+        >
+          <span>Download Note</span>
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M50.6667 32V50.6667H13.3333V32H8V50.6667C8 53.6 10.4 56 13.3333 56H50.6667C53.6 56 56 53.6 56 50.6667V32H50.6667ZM34.6667 33.7867L41.5733 26.9067L45.3333 30.6667L32 44L18.6667 30.6667L22.4267 26.9067L29.3333 33.7867V8H34.6667V33.7867Z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+
+        <div class="theme-toggle">
+          <input
+            type="checkbox"
+            name="themeToggle"
+            id="themeToggle"
+            class="theme-toggle__input"
+            checked="checked"
+          />
+          <label for="themeToggle" class="theme-toggle__label" />
+        </div>
       </div>
-      <button id="addNoteBtn">➕ Add Note</button>
+      <textarea
+        name="editor"
+        id="editor"
+        class="editor"
+        autofocus
+        placeholder="Start typing your note here..."
+      ></textarea>
+      
+      <nav class="sidebar">
+        <div id="noteBtns" class="notes-list"></div>
+        <button id="addNoteBtn">Add Note</button>
+      </nav>
     </div>
     <script src="./script.ts"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/service-worker.js");
+      }
+    </script>
   </body>
 </html>

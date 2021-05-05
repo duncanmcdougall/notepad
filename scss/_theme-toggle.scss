@@ -1,0 +1,46 @@
+.theme-toggle {
+  display: none;
+}
+
+.theme-toggle__input {
+  display: none;
+}
+
+.theme-toggle__label {
+  display: none;
+  cursor: pointer;
+  width: 3.5rem;
+  height: calc(1.5rem + 6px);
+  background: #aaa;
+  border-radius: 1rem;
+  padding: 4px;
+  position: relative;
+  box-shadow: 2px 2px 2px rgb(0 0 0 / 30%) inset;
+
+  &:before {
+    content: "🌞";
+    background: white;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 1em;
+    position: absolute;
+    top: 50%;
+    left: 0.1rem;
+    transform: translate(0%, -50%) rotate(0deg);
+    left: 3px;
+    text-align: center;
+    transition: all 1s ease;
+  }
+}
+
+.theme-toggle__input:checked + .theme-toggle__label:before {
+  content: "🌛";
+  left: calc(100% - 1.5rem - 3px);
+  transform: translate(0%, -50%) rotate(360deg);
+}
+
+@media screen and (min-width: 1000px) {
+  .theme-toggle__label {
+    display: block;
+  }
+}

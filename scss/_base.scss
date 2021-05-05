@@ -1,0 +1,74 @@
+html {
+  font-size: 18px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--color);
+  font-family: "JetBrains Mono", monospace;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+  height: 100vh;
+}
+
+h1, h2, h3, h4, h5, p {
+  margin: 0.75em 0;
+}
+
+a {
+  color: var(--highlight);
+  text-decoration-color: var(--color);
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  transition: all 0.2s ease;
+  color: inherit;
+}
+
+.icon-button {
+  line-height: 1;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: min-content auto;
+  grid-template-areas:
+      "actions"
+      "main";
+  height: 100vh;
+}
+
+.action-bar {
+  grid-area: actions;
+}
+
+.editor,
+.sidebar {
+  grid-area: main;
+}
+
+@media screen and (min-width: 1000px) {
+  .grid {
+    display: grid;
+    grid-template-columns: auto 12rem;
+    grid-template-rows: auto min-content;
+    grid-template-areas:
+      "editor sidebar"
+      "actions actions"
+  }
+
+  .editor {
+    grid-area: editor;
+  }
+  .sidebar {
+    grid-area: sidebar;
+  }
+}

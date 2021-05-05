@@ -1,0 +1,91 @@
+.action-bar {
+  display: flex;
+  flex-direction: row;
+  background: var(--bg);
+  justify-content: flex-end;
+  align-items: center;
+  border: solid var(--separator);
+  border-width: 0 0 1px;
+
+}
+
+.action-bar__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  text-transform: uppercase;
+
+  span {
+    margin-right: 0.75rem;
+    display: none;
+  }
+
+  &:hover,
+  &:focus {
+    filter: contrast(2);
+  }
+}
+
+.action-bar__button svg {
+  width: 1.5rem;
+}
+
+.action-bar__button--nav-toggle,
+.action-bar__button--back {
+  margin-right: auto;
+}
+
+.action-bar__button--back {
+  margin-right: auto;
+}
+
+.action-bar__button--back {
+  display: none;
+}
+
+body.menu-open {
+  .action-bar__button--nav-toggle,
+  .action-bar__button--download,
+  .action-bar__button--delete {
+    display: none;
+  }
+
+  .action-bar__button--back {
+    display: block;
+  }
+}
+
+
+#lastModified {
+  display: none;
+  white-space: nowrap;
+  color: #ccc;
+  margin-right: auto;
+}
+
+@media screen and (min-width: 1000px) {
+  .action-bar {
+    border-width: 1px 0 0;
+    padding: 1rem;
+  }
+
+  .action-bar__button {
+    padding: 0.5rem 1rem;
+    background: var(--action-btns);
+    margin-right: 1rem;
+
+    span {
+      display: inline-block;
+    }
+  }
+
+  .action-bar__button--nav-toggle,
+  .action-bar__button--back {
+    display: none;
+  }
+
+  #lastModified {
+    display: inline-block;
+  }
+}

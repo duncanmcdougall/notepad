@@ -1,5 +1,6 @@
 export interface INote {
   id: string;
-  lastModified?: string;
+  dateUpdated?: string;
+  dateCreated?: string;
   content: string;
 }

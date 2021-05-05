@@ -1,0 +1,66 @@
+.sidebar {
+  display: none;
+  width: 100%;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+.menu-open .sidebar {
+  display: flex;
+}
+
+.note-btn {
+  border-bottom: 1px solid var(--separator);
+  text-align: left;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+  border-left: 3px solid transparent;
+  white-space: nowrap;
+  padding: 1rem;
+
+  &:hover,
+  &:focus {
+    background: var(--button-hover);
+  }
+
+  &.note-btn--active {
+    border-left-color: var(--highlight);
+  }
+
+  &:first-child {
+    border-top: none;
+  }
+
+  &:last-child {
+    border-bottom: 1px solid var(--separator);
+  }
+}
+
+#addNoteBtn {
+  text-transform: uppercase;
+  background-color: var(--highlight);
+  color: #222;
+  font-weight: 700;
+  padding: 1rem;
+
+  &:hover,
+  &:focus {
+    opacity: 0.8;
+  }
+
+  .plus-icon {
+    width: 1rem;
+    vertical-align: middle;
+    top: -0.1em;
+    position: relative;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .sidebar {
+    border-left: 1px solid var(--separator);
+    display: flex;
+  }
+}

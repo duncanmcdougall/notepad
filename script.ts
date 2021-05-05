@@ -1,12 +1,20 @@
 import { INote } from "./types";
-import { generateID } from "./utils";
+import "./prefer-color-scheme";
+import * as NoteService from "./NoteService";
 
-const currentVersion = "1.0.0";
+const currentVersion = "0.1.0";
 
 class App {
   editor = document.getElementById("editor") as HTMLTextAreaElement;
   noteBtns = document.getElementById("noteBtns");
   lastModified = document.getElementById("lastModified");
+  downloadNoteBtn = document.getElementById("downloadNoteBtn") as HTMLButtonElement;
+  deleteNoteBtn = document.getElementById("deleteNoteBtn") as HTMLButtonElement;
+  navToggleBtn = document.getElementById("navToggleBtn") as HTMLButtonElement;
+  backBtn = document.getElementById("backBtn") as HTMLButtonElement;
+  addNoteBtn = document.getElementById("addNoteBtn") as HTMLButtonElement;
+  fontSS = document.getElementById("fontSS") as HTMLLinkElement;
+
   activeNoteId: string;
   activeNoteBtn: HTMLButtonElement;
 
@@ -14,89 +22,128 @@ class App {
     const version = localStorage.getItem("version") ?? currentVersion;
     if (version !== currentVersion) {
       // run migrations if data is an older version
-      // ...
-      localStorage.setItem("version", currentVersion);
     }
+    localStorage.setItem("version", currentVersion);
 
-    this.editor.addEventListener("keyup", (event) => this.handleKeyUp(event));
-
-    const notes = this.getNotes();
+    const notes = NoteService.getNotes();
 
     notes.map((note) => {
       this.createButton(note);
     });
 
     if (!notes.length) {
-      this.createNote();
+      this.createBlankNote();
     } else {
       this.loadNote(notes[0].id);
     }
 
-    this.noteBtns.querySelector("button").classList.add("active");
+    this.noteBtns.querySelector(".note-btn").classList.add("note-btn--active");
 
-    document.querySelector("#addNoteBtn").addEventListener("click", () => {
-      this.createNote();
-      this.editor.focus();
+    this.editor.addEventListener("keyup", (event) => this.handleKeyUp(event));
+
+    this.addNoteBtn.addEventListener("click", this.createBlankNote);
+
+    this.downloadNoteBtn?.addEventListener("click", this.saveCurrentNoteToFile);
+
+    this.navToggleBtn.addEventListener("click", () => {
+      document.body.classList.add("menu-open");
     });
+
+    this.backBtn.addEventListener("click", () => {
+      document.body.classList.remove("menu-open");
+    });
+
+    this.deleteNoteBtn.addEventListener("click", () => {
+      const response = confirm("Are you sure you want to delete this note?");
+      if(response) {
+        this.deleteActiveNote();
+      }
+    });
+
+    window.onbeforeunload = () => {
+      NoteService.clean();
+    };
   }
 
-  private getNotes(): INote[] {
-    return JSON.parse(localStorage.getItem("notes")) ?? [];
-  }
+
 
   private loadNote(id: string) {
     this.activeNoteId = id;
-    const note = this.getNotes().find((note) => note.id === id);
+    const note = NoteService.getNoteById(id);
     this.editor.value = note.content;
     this.editor.focus();
-    this.activeNoteBtn = (this.noteBtns.querySelector(
-      `[data-id=${note.id}]`
-    ) as HTMLButtonElement);
-    this.lastModified.innerText = note.lastModified ? `Updated: ${new Date(note.lastModified).toLocaleString()}` : "";
+    this.editor.scrollTo(0, 0);
+    this.activeNoteBtn = this.noteBtns.querySelector(`[data-id=${note.id}]`) as HTMLButtonElement;
+    this.lastModified.innerText = note.dateUpdated
+      ? `Updated: ${new Date(note.dateUpdated).toLocaleString()}`
+      : "";
+    document.body.classList.remove("menu-open");
+    document.title = `Notepad / ${this.generateButtonText(note)}`;
   }
 
   private generateButtonText(note: INote) {
-    return `📑 ${note.content ? note.content.trim().substring(0, 10).trim() : "blank"}`;
+    const trimmed = note.content.trim();
+    const res = trimmed
+      ? trimmed.substr(0, trimmed.indexOf("\n") > -1 ? trimmed.indexOf("\n") : 100)
+      : "📄 blank";
+    return res;
   }
 
   private createButton(note: INote) {
     const btn = document.createElement("button");
+    btn.classList.add("note-btn");
     if (note.id === this.activeNoteId) {
-      btn.classList.add("active");
+      btn.classList.add("note-btn--active");
     }
     btn.innerText = this.generateButtonText(note);
     btn.setAttribute("data-id", note.id);
     btn.addEventListener("click", () => {
       this.loadNote(note.id);
-      Array.from(this.noteBtns.querySelectorAll(".active")).forEach((btn) => {
-        btn.classList.remove("active");
+      Array.from(this.noteBtns.querySelectorAll(".note-btn--active")).forEach((btn) => {
+        btn.classList.remove("note-btn--active");
       });
-      btn.classList.add("active");
+      btn.classList.add("note-btn--active");
     });
     this.noteBtns.appendChild(btn);
   }
 
-  private setNotes = (notes) => {
-    localStorage.setItem("notes", JSON.stringify(notes));
+  private createBlankNote = () => {
+    const newNote = NoteService.createBlankNote();
+    this.createButton(newNote);
+    this.loadNote(newNote.id);
   };
 
-  private createNote = () => {
-    const newNote: INote = { id: generateID(), content: "" };
-    this.setNotes([...this.getNotes(), newNote]);
-    this.loadNote(newNote.id);
-    this.createButton(newNote);
+  private saveCurrentNoteToFile = () => {
+    const content = this.editor.value as string;
+    const blob = new Blob([content], { type:"text/plain;charset=UTF-8"});
+    const blobUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = blobUrl;
+    a.download = "note.txt";
+    a.click();
+    URL.revokeObjectURL(blobUrl)
   };
 
   private handleKeyUp(e: Event) {
-    const notes = this.getNotes();
-    const note = notes.find((note) => note.id === this.activeNoteId);
-    note.content = e.target.value as string;
-    note.lastModified = new Date().toISOString();
-    this.lastModified.innerText = note.lastModified ? `Updated: ${new Date(note.lastModified).toLocaleString()}` : "";
-    this.setNotes(notes);
+    const note = NoteService.updateNote(this.activeNoteId, e.target.value);
+    this.lastModified.innerText = `Updated: ${new Date(note.dateUpdated).toLocaleString()}`
+
     const btnText = this.generateButtonText(note);
-    if(btnText !== this.activeNoteBtn.innerText) {
+    if (btnText !== this.activeNoteBtn.innerText) {
       this.activeNoteBtn.innerText = btnText;
+    }
+  }
+
+  private deleteActiveNote() {
+    const note = NoteService.getNoteById(this.activeNoteId);
+    NoteService.deleteNote(note);
+    const notes = NoteService.getNotes();
+    document.querySelector(`.note-btn[data-id=${this.activeNoteId}]`).remove();
+    
+    if(notes.length === 0) {
+      this.createBlankNote();
+    }else {
+      this.loadNote(notes[0].id);
     }
   }
 }

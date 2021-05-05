@@ -1,0 +1,18 @@
+.site-footer {
+  grid-area: footer;
+  width: 100%;
+  background: var(--footer);
+  padding: 0 1rem;
+  display: flex;
+  display: none;
+  align-items: center;
+  border-top: 1px solid #000;
+
+  > *  {
+    margin-right: 2rem;
+  }
+}
+
+.site-footer__about {
+  margin-right: 2rem;
+}

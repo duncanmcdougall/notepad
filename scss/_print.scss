@@ -1,0 +1,13 @@
+@media print {
+  body,
+  textarea {
+    padding: 0;
+    margin: 0;
+  }
+
+  .sidebar,
+  #lastModified,
+  .site-footer {
+    display: none;
+  }
+}
