@@ -65,8 +65,6 @@ class App {
     };
   }
 
-
-
   private loadNote(id: string) {
     this.activeNoteId = id;
     const note = NoteService.getNoteById(id);
@@ -78,7 +76,8 @@ class App {
       ? `Updated: ${new Date(note.dateUpdated).toLocaleString()}`
       : "";
     document.body.classList.remove("menu-open");
-    document.title = `Notepad / ${this.generateButtonText(note)}`;
+    this.updatePageTitle(note);
+
   }
 
   private generateButtonText(note: INote) {
@@ -127,11 +126,8 @@ class App {
   private handleKeyUp(e: Event) {
     const note = NoteService.updateNote(this.activeNoteId, e.target.value);
     this.lastModified.innerText = `Updated: ${new Date(note.dateUpdated).toLocaleString()}`
-
-    const btnText = this.generateButtonText(note);
-    if (btnText !== this.activeNoteBtn.innerText) {
-      this.activeNoteBtn.innerText = btnText;
-    }
+    this.activeNoteBtn.innerText = this.generateButtonText(note);
+    this.updatePageTitle(note);
   }
 
   private deleteActiveNote() {
@@ -145,6 +141,10 @@ class App {
     }else {
       this.loadNote(notes[0].id);
     }
+  }
+
+  private updatePageTitle(note: INote) {
+    document.title = `Notepad / ${this.generateButtonText(note)}`;
   }
 }
 

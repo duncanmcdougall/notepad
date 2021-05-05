@@ -1,3 +1,5 @@
+import 'regenerator-runtime/runtime';
+
 const CACHE_NAME = 'offline';
 const OFFLINE_URL = 'index.html';
 
