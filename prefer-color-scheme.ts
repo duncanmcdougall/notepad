@@ -1,10 +1,10 @@
 let theme = localStorage.getItem("theme");
-if(!theme) {
-  theme = window.matchMedia('(prefers-color-scheme: light)')?.matches ? "light" : "dark";
+if (!theme) {
+  theme = window.matchMedia("(prefers-color-scheme: light)")?.matches ? "light" : "dark";
 }
 
 const themeToggle = document.getElementById("themeToggle") as HTMLInputElement;
-if(theme === "light") {
+if (theme === "light") {
   themeToggle.checked = false;
   document.body.setAttribute("data-theme", "light");
 }

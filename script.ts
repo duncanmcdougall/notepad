@@ -55,7 +55,7 @@ class App {
 
     this.deleteNoteBtn.addEventListener("click", () => {
       const response = confirm("Are you sure you want to delete this note?");
-      if(response) {
+      if (response) {
         this.deleteActiveNote();
       }
     });
@@ -77,7 +77,6 @@ class App {
       : "";
     document.body.classList.remove("menu-open");
     this.updatePageTitle(note);
-
   }
 
   private generateButtonText(note: INote) {
@@ -114,18 +113,18 @@ class App {
 
   private saveCurrentNoteToFile = () => {
     const content = this.editor.value as string;
-    const blob = new Blob([content], { type:"text/plain;charset=UTF-8"});
+    const blob = new Blob([content], { type: "text/plain;charset=UTF-8" });
     const blobUrl = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = blobUrl;
     a.download = "note.txt";
     a.click();
-    URL.revokeObjectURL(blobUrl)
+    URL.revokeObjectURL(blobUrl);
   };
 
   private handleKeyUp(e: Event) {
     const note = NoteService.updateNote(this.activeNoteId, e.target.value);
-    this.lastModified.innerText = `Updated: ${new Date(note.dateUpdated).toLocaleString()}`
+    this.lastModified.innerText = `Updated: ${new Date(note.dateUpdated).toLocaleString()}`;
     this.activeNoteBtn.innerText = this.generateButtonText(note);
     this.updatePageTitle(note);
   }
@@ -135,10 +134,10 @@ class App {
     NoteService.deleteNote(note);
     const notes = NoteService.getNotes();
     document.querySelector(`.note-btn[data-id=${this.activeNoteId}]`).remove();
-    
-    if(notes.length === 0) {
+
+    if (notes.length === 0) {
       this.createBlankNote();
-    }else {
+    } else {
       this.loadNote(notes[0].id);
     }
   }

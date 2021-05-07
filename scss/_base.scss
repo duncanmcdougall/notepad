@@ -15,7 +15,12 @@ body {
   height: 100vh;
 }
 
-h1, h2, h3, h4, h5, p {
+h1,
+h2,
+h3,
+h4,
+h5,
+p {
   margin: 0.75em 0;
 }
 
@@ -41,8 +46,8 @@ button {
   grid-template-columns: 100%;
   grid-template-rows: min-content auto;
   grid-template-areas:
-      "actions"
-      "main";
+    "actions"
+    "main";
   height: 100vh;
 }
 
@@ -62,7 +67,7 @@ button {
     grid-template-rows: auto min-content;
     grid-template-areas:
       "editor sidebar"
-      "actions actions"
+      "actions actions";
   }
 
   .editor {
