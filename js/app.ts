@@ -1,8 +1,7 @@
 import { INote } from "./types";
 import "./prefer-color-scheme";
 import * as NoteService from "./NoteService";
-
-const currentVersion = "0.1.0";
+import { runMigrations } from "./migrations";
 
 class App {
   editor = document.getElementById("editor") as HTMLTextAreaElement;
@@ -14,16 +13,13 @@ class App {
   backBtn = document.getElementById("backBtn") as HTMLButtonElement;
   addNoteBtn = document.getElementById("addNoteBtn") as HTMLButtonElement;
   fontSS = document.getElementById("fontSS") as HTMLLinkElement;
+  toggleFullWidthBtn = document.getElementById("toggleFullWidthBtn") as HTMLButtonElement;
 
   activeNoteId: string;
   activeNoteBtn: HTMLButtonElement;
 
   constructor() {
-    const version = localStorage.getItem("version") ?? currentVersion;
-    if (version !== currentVersion) {
-      // run migrations if data is an older version
-    }
-    localStorage.setItem("version", currentVersion);
+    runMigrations();
 
     const notes = NoteService.getNotes();
 
@@ -34,7 +30,7 @@ class App {
     if (!notes.length) {
       this.createBlankNote();
     } else {
-      this.loadNote(notes[0].id);
+      this.loadNote(notes[0]);
     }
 
     this.noteBtns.querySelector(".note-btn").classList.add("note-btn--active");
@@ -60,14 +56,22 @@ class App {
       }
     });
 
+    !!localStorage.getItem("narrow") && document.body.classList.add("narrow");
+    this.toggleFullWidthBtn.addEventListener("click", () => {
+      const narrow = document.body.classList.toggle("narrow");
+      narrow ? localStorage.setItem("narrow", "1") : localStorage.removeItem("narrow");
+    })
+
     window.onbeforeunload = () => {
       NoteService.clean();
     };
+    setTimeout(() => {
+      document.body.classList.remove("preload");
+    }, 500);
   }
 
-  private loadNote(id: string) {
-    this.activeNoteId = id;
-    const note = NoteService.getNoteById(id);
+  private loadNote(note: INote) {
+    this.activeNoteId = note.id;
     this.editor.value = note.content;
     this.editor.focus();
     this.editor.scrollTo(0, 0);
@@ -96,7 +100,8 @@ class App {
     btn.innerText = this.generateButtonText(note);
     btn.setAttribute("data-id", note.id);
     btn.addEventListener("click", () => {
-      this.loadNote(note.id);
+      const noteToOpen = NoteService.getNoteById(note.id);
+      this.loadNote(noteToOpen);
       Array.from(this.noteBtns.querySelectorAll(".note-btn--active")).forEach((btn) => {
         btn.classList.remove("note-btn--active");
       });
@@ -108,7 +113,7 @@ class App {
   private createBlankNote = () => {
     const newNote = NoteService.createBlankNote();
     this.createButton(newNote);
-    this.loadNote(newNote.id);
+    this.loadNote(newNote);
   };
 
   private saveCurrentNoteToFile = () => {
@@ -130,15 +135,15 @@ class App {
   }
 
   private deleteActiveNote() {
-    const note = NoteService.getNoteById(this.activeNoteId);
-    NoteService.deleteNote(note);
-    const notes = NoteService.getNotes();
+    NoteService.deleteNoteById(this.activeNoteId);
     document.querySelector(`.note-btn[data-id=${this.activeNoteId}]`).remove();
 
-    if (notes.length === 0) {
-      this.createBlankNote();
+    const firstNote = NoteService.getFirstNote();
+
+    if (!!firstNote) {
+      this.loadNote(firstNote);
     } else {
-      this.loadNote(notes[0].id);
+      this.createBlankNote();
     }
   }
 

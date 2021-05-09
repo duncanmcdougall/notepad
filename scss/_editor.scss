@@ -15,8 +15,16 @@ body.menu-open .editor {
   padding: 1rem;
   flex: 1 0 auto;
   caret-color: var(--highlight);
+  transition: padding 0.3s ease;
 
   &:focus {
     outline: none;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .narrow .editor {
+    padding: 1rem calc((100% - 800px) / 2);
+    
   }
 }

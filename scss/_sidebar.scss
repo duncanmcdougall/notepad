@@ -4,10 +4,15 @@
   flex-direction: column;
   align-items: stretch;
   justify-content: space-between;
+  overflow: hidden;
 }
 
 .menu-open .sidebar {
   display: flex;
+}
+
+.notes-list {
+  overflow-y: auto;
 }
 
 .note-btn {

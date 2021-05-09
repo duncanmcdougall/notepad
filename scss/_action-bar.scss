@@ -6,6 +6,23 @@
   align-items: center;
   border: solid var(--separator);
   border-width: 0 0 1px;
+
+  select {
+    display: none;
+    margin-right: 1rem;
+    height: 45px;
+
+    &:hover,
+    &:focus {
+      cursor: pointer;
+      outline: 0;
+    }
+  }
+  
+  option {
+    background: white;
+    color: black;
+  }
 }
 
 .action-bar__button {
@@ -14,6 +31,7 @@
   justify-content: center;
   padding: 1rem;
   text-transform: uppercase;
+  height: 45px;
 
   span {
     margin-right: 0.75rem;
@@ -28,6 +46,7 @@
 
 .action-bar__button svg {
   width: 1.5rem;
+  line-height: 0;
 }
 
 .action-bar__button--nav-toggle,
@@ -40,6 +59,10 @@
 }
 
 .action-bar__button--back {
+  display: none;
+}
+
+.action-bar__button--fullwidth {
   display: none;
 }
 
@@ -66,6 +89,10 @@ body.menu-open {
   .action-bar {
     border-width: 1px 0 0;
     padding: 1rem;
+
+    select {
+      display: flex;
+    }
   }
 
   .action-bar__button {
@@ -85,5 +112,18 @@ body.menu-open {
 
   #lastModified {
     display: inline-block;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .action-bar__button--fullwidth {
+    display: inline-flex;
+    svg {
+      color: rgba(255,255,255,1);
+    }
+  }
+  
+  .narrow .action-bar__button--fullwidth svg {
+    color: rgba(255,255,255, 0.1);
   }
 }

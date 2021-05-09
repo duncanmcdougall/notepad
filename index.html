@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#222222" />
+    <meta name="description" content="A notepad that keeps your notes stored privately in the browser.">
     <title>Notepad</title>
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link
@@ -13,13 +14,13 @@
     />
     <link rel="stylesheet" href="./scss/styles.scss" />
     <link rel="manifest" href="./manifest.webmanifest" />
-    <link rel="apple-touch-icon" href="./logo192.png" />
+    <link rel="apple-touch-icon" href="./images/logo192.png" />
     <link
       rel="icon"
       href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📑</text></svg>"
     />
   </head>
-  <body>
+  <body class="preload">
     <div class="grid">
       <div class="action-bar">
         <small id="lastModified"></small>
@@ -50,6 +51,17 @@
         </button>
 
         <button
+          id="toggleFullWidthBtn"
+          class="icon-button action-bar__button action-bar__button--fullwidth"
+          aria-label="Toggle Full Width"
+        >
+          <span>Full Width</span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+        </button>
+
+        <button
           id="deleteNoteBtn"
           class="icon-button action-bar__button action-bar__button--delete"
           aria-label="Delete Note"
@@ -62,6 +74,12 @@
             />
           </svg>
         </button>
+
+        <select class="action-bar__select" id="fontSelector">
+          <option value="">JetBrains Mono</option>
+          <option value="S">Petoria</option>
+          <option value="SS">Sans 1</option>
+        </select>
 
         <button
           id="downloadNoteBtn"
@@ -101,10 +119,10 @@
         <button id="addNoteBtn">Add Note</button>
       </nav>
     </div>
-    <script src="./script.ts"></script>
+    <script src="./js/app.ts"></script>
     <script>
       if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("/service-worker.js");
+        navigator.serviceWorker.register("./js/service-worker.js");
       }
     </script>
   </body>

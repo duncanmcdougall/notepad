@@ -1,0 +1,36 @@
+.grid {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: min-content auto;
+  grid-template-areas:
+    "actions"
+    "main";
+  height: 100vh;
+}
+
+.action-bar {
+  grid-area: actions;
+}
+
+.editor,
+.sidebar {
+  grid-area: main;
+}
+
+@media screen and (min-width: 1000px) {
+  .grid {
+    display: grid;
+    grid-template-columns: auto 12rem;
+    grid-template-rows: auto min-content;
+    grid-template-areas:
+      "editor sidebar"
+      "actions actions";
+  }
+
+  .editor {
+    grid-area: editor;
+  }
+  .sidebar {
+    grid-area: sidebar;
+  }
+}
