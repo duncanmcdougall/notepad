@@ -34,3 +34,9 @@
     grid-area: sidebar;
   }
 }
+
+@media screen and (min-width: 1200px) {
+  .grid {
+    grid-template-columns: auto 14rem;
+  }
+}
