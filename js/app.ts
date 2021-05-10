@@ -14,6 +14,7 @@ class App {
   addNoteBtn = document.getElementById("addNoteBtn") as HTMLButtonElement;
   fontSS = document.getElementById("fontSS") as HTMLLinkElement;
   toggleFullWidthBtn = document.getElementById("toggleFullWidthBtn") as HTMLButtonElement;
+  toggleWordWrapBtn = document.getElementById("toggleWordWrapBtn") as HTMLButtonElement;
 
   activeNote: INote;
   activeNoteBtn: HTMLButtonElement;
@@ -26,6 +27,12 @@ class App {
     this.toggleFullWidthBtn.addEventListener("click", () => {
       const narrow = document.body.classList.toggle("narrow");
       narrow ? localStorage.setItem("narrow", "1") : localStorage.removeItem("narrow");
+    });
+
+    !!localStorage.getItem("nowrap") && document.body.classList.add("nowrap");
+    this.toggleWordWrapBtn.addEventListener("click", () => {
+      const narrow = document.body.classList.toggle("nowrap");
+      narrow ? localStorage.setItem("nowrap", "1") : localStorage.removeItem("nowrap");
     });
 
     const notes = NoteService.getNotes();

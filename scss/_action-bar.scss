@@ -66,6 +66,10 @@
   display: none;
 }
 
+.action-bar__button--wordwrap {
+  display: none;
+}
+
 body.menu-open {
   .action-bar__button--nav-toggle,
   .action-bar__button--download,
@@ -116,7 +120,8 @@ body.menu-open {
 }
 
 @media screen and (min-width: 1200px) {
-  .action-bar__button--fullwidth {
+  .action-bar__button--fullwidth,
+  .action-bar__button--wordwrap {
     display: inline-flex;
     svg {
       color: rgba(255,255,255,1);
@@ -124,6 +129,10 @@ body.menu-open {
   }
   
   .narrow .action-bar__button--fullwidth svg {
+    color: rgba(255,255,255, 0.1);
+  }
+
+  .nowrap .action-bar__button--wordwrap svg {
     color: rgba(255,255,255, 0.1);
   }
 }

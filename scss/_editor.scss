@@ -22,6 +22,10 @@ body.menu-open .editor {
   }
 }
 
+.nowrap .editor {
+  white-space: pre;
+}
+
 @media screen and (min-width: 1200px) {
   .narrow .editor {
     padding: 1rem calc((100% - 800px) / 2);
