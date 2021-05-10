@@ -15,11 +15,18 @@ class App {
   fontSS = document.getElementById("fontSS") as HTMLLinkElement;
   toggleFullWidthBtn = document.getElementById("toggleFullWidthBtn") as HTMLButtonElement;
 
-  activeNoteId: string;
+  activeNote: INote;
   activeNoteBtn: HTMLButtonElement;
 
   constructor() {
     runMigrations();
+
+    // Full Width/Narrow setting
+    !!localStorage.getItem("narrow") && document.body.classList.add("narrow");
+    this.toggleFullWidthBtn.addEventListener("click", () => {
+      const narrow = document.body.classList.toggle("narrow");
+      narrow ? localStorage.setItem("narrow", "1") : localStorage.removeItem("narrow");
+    });
 
     const notes = NoteService.getNotes();
 
@@ -27,13 +34,14 @@ class App {
       this.createButton(note);
     });
 
-    if (!notes.length) {
+    const note = NoteService.getNoteById(localStorage.getItem("activeNoteId"));
+    if (!!note) {
+      this.loadNote(note);
+    } else if (!notes.length) {
       this.createBlankNote();
     } else {
-      this.loadNote(notes[0]);
+      this.loadNote(NoteService.getFirstNote());
     }
-
-    this.noteBtns.querySelector(".note-btn").classList.add("note-btn--active");
 
     this.editor.addEventListener("keyup", (event) => this.handleKeyUp(event));
 
@@ -56,22 +64,17 @@ class App {
       }
     });
 
-    !!localStorage.getItem("narrow") && document.body.classList.add("narrow");
-    this.toggleFullWidthBtn.addEventListener("click", () => {
-      const narrow = document.body.classList.toggle("narrow");
-      narrow ? localStorage.setItem("narrow", "1") : localStorage.removeItem("narrow");
-    })
-
     window.onbeforeunload = () => {
       NoteService.clean();
     };
+
     setTimeout(() => {
       document.body.classList.remove("preload");
     }, 500);
   }
 
   private loadNote(note: INote) {
-    this.activeNoteId = note.id;
+    this.activeNote = note;
     this.editor.value = note.content;
     this.editor.focus();
     this.editor.scrollTo(0, 0);
@@ -80,7 +83,12 @@ class App {
       ? `Updated: ${new Date(note.dateUpdated).toLocaleString()}`
       : "";
     document.body.classList.remove("menu-open");
-    this.updatePageTitle(note);
+    this.updatePageTitle();
+    localStorage.setItem("activeNoteId", note.id);
+    Array.from(this.noteBtns.querySelectorAll(".note-btn--active")).forEach((btn) => {
+      btn.classList.remove("note-btn--active");
+    });
+    this.activeNoteBtn.classList.add("note-btn--active");
   }
 
   private generateButtonText(note: INote) {
@@ -94,18 +102,11 @@ class App {
   private createButton(note: INote) {
     const btn = document.createElement("button");
     btn.classList.add("note-btn");
-    if (note.id === this.activeNoteId) {
-      btn.classList.add("note-btn--active");
-    }
     btn.innerText = this.generateButtonText(note);
     btn.setAttribute("data-id", note.id);
     btn.addEventListener("click", () => {
       const noteToOpen = NoteService.getNoteById(note.id);
       this.loadNote(noteToOpen);
-      Array.from(this.noteBtns.querySelectorAll(".note-btn--active")).forEach((btn) => {
-        btn.classList.remove("note-btn--active");
-      });
-      btn.classList.add("note-btn--active");
     });
     this.noteBtns.appendChild(btn);
   }
@@ -128,15 +129,17 @@ class App {
   };
 
   private handleKeyUp(e: Event) {
-    const note = NoteService.updateNote(this.activeNoteId, e.target.value);
-    this.lastModified.innerText = `Updated: ${new Date(note.dateUpdated).toLocaleString()}`;
-    this.activeNoteBtn.innerText = this.generateButtonText(note);
-    this.updatePageTitle(note);
+    NoteService.updateNote(this.activeNote, e.target.value);
+    this.lastModified.innerText = `Updated: ${new Date(
+      this.activeNote.dateUpdated
+    ).toLocaleString()}`;
+    this.activeNoteBtn.innerText = this.generateButtonText(this.activeNote);
+    this.updatePageTitle();
   }
 
   private deleteActiveNote() {
-    NoteService.deleteNoteById(this.activeNoteId);
-    document.querySelector(`.note-btn[data-id=${this.activeNoteId}]`).remove();
+    NoteService.deleteNote(this.activeNote);
+    document.querySelector(`.note-btn[data-id=${this.activeNote.id}]`).remove();
 
     const firstNote = NoteService.getFirstNote();
 
@@ -147,8 +150,8 @@ class App {
     }
   }
 
-  private updatePageTitle(note: INote) {
-    document.title = `Notepad / ${this.generateButtonText(note)}`;
+  private updatePageTitle() {
+    document.title = `Notepad / ${this.generateButtonText(this.activeNote)}`;
   }
 }
 
