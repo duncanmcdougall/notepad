@@ -1,7 +1,8 @@
 import "regenerator-runtime/runtime";
 
 const CACHE_NAME = "offline";
-const OFFLINE_URL = "index.html";
+const OFFLINE_URL = "/";
+const cache_files = ["/index.html", "/"];
 
 self.addEventListener("install", function (event) {
   console.log("[ServiceWorker] Install");
