@@ -18,7 +18,7 @@
       outline: 0;
     }
   }
-  
+
   option {
     background: white;
     color: black;
@@ -32,6 +32,7 @@
   padding: 1rem;
   text-transform: uppercase;
   height: 45px;
+  border: 2px solid transparent;
 
   span {
     margin-right: 0.75rem;
@@ -40,7 +41,7 @@
 
   &:hover,
   &:focus {
-    filter: contrast(2);
+    border: 2px solid var(--color);
   }
 }
 
@@ -124,15 +125,12 @@ body.menu-open {
   .action-bar__button--wordwrap {
     display: inline-flex;
     svg {
-      color: rgba(255,255,255,1);
+      color: var(--action-checked);
     }
   }
-  
-  .narrow .action-bar__button--fullwidth svg {
-    color: rgba(255,255,255, 0.1);
-  }
 
+  .narrow .action-bar__button--fullwidth svg,
   .nowrap .action-bar__button--wordwrap svg {
-    color: rgba(255,255,255, 0.1);
+    color: var(--action-unchecked);
   }
 }

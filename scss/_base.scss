@@ -32,12 +32,13 @@ a {
 button {
   cursor: pointer;
   border: 0;
+  border-radius: 0;
   background: transparent;
   transition: all 0.2s ease;
   color: inherit;
 }
 
-select{
+select {
   background: #444;
   color: inherit;
   border: 0;
@@ -49,9 +50,6 @@ select{
   line-height: 1;
 }
 
-
-
 body.preload * {
   transition-duration: 0s !important;
 }
-

@@ -6,6 +6,9 @@
   --button-hover: #444;
   --action-btns: #444;
   --separator: #444;
+
+  --action-unchecked: rgba(255, 255, 255, 0.1);
+  --action-checked: rgba(255, 255, 255, 1);
 }
 
 [data-theme="light"] {
@@ -14,4 +17,7 @@
   --button-hover: #ccc;
   --footer: #fff;
   --action-btns: #eee;
+
+  --action-unchecked: rgba(0, 0, 0, 0.1);
+  --action-checked: #13a801;
 }
