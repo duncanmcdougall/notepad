@@ -12,7 +12,6 @@ class App {
   navToggleBtn = document.getElementById("navToggleBtn") as HTMLButtonElement;
   backBtn = document.getElementById("backBtn") as HTMLButtonElement;
   addNoteBtn = document.getElementById("addNoteBtn") as HTMLButtonElement;
-  fontSS = document.getElementById("fontSS") as HTMLLinkElement;
   toggleFullWidthBtn = document.getElementById("toggleFullWidthBtn") as HTMLButtonElement;
   toggleWordWrapBtn = document.getElementById("toggleWordWrapBtn") as HTMLButtonElement;
 
@@ -51,6 +50,8 @@ class App {
     }
 
     this.editor.addEventListener("keyup", (event) => this.handleKeyUp(event));
+
+    document.addEventListener("drop", this.handleDroppedFile);
 
     this.addNoteBtn.addEventListener("click", this.createBlankNote);
 
@@ -121,6 +122,7 @@ class App {
   private createBlankNote = () => {
     const newNote = NoteService.createBlankNote();
     this.createButton(newNote);
+    this.scrollNotesToBottom();
     this.loadNote(newNote);
   };
 
@@ -130,7 +132,7 @@ class App {
     const blobUrl = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = blobUrl;
-    a.download = "note.txt";
+    a.download = `${content.trim().substring(0, 20)}.txt`;
     a.click();
     URL.revokeObjectURL(blobUrl);
   };
@@ -160,6 +162,28 @@ class App {
   private updatePageTitle() {
     document.title = `Notepad / ${this.generateButtonText(this.activeNote)}`;
   }
+
+  private scrollNotesToBottom() {
+    document.querySelector(".notes-list").scrollTo({
+      top: 100000,
+      behavior: "smooth",
+    });
+  }
+
+  private handleDroppedFile = (event: DragEvent) => {
+    event.preventDefault();
+    const items = event.dataTransfer.items || [];
+    [...items].forEach((item) => {
+      if (item.kind !== "file") return;
+      const file = item.getAsFile();
+      file.text().then((text) => {
+        const newNote = NoteService.createNoteWithText(text);
+        this.createButton(newNote);
+        this.scrollNotesToBottom();
+        this.loadNote(newNote);
+      });
+    });
+  };
 }
 
 new App();

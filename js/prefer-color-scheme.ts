@@ -15,4 +15,4 @@ themeToggle?.addEventListener("change", (e) => {
   localStorage.setItem("theme", theme);
 });
 
-(document.querySelector(".theme-toggle") as HTMLElement)?.style.display = "block";
+(document.querySelector(".theme-toggle") as HTMLElement).style.display = "block";

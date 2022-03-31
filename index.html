@@ -6,12 +6,9 @@
     <meta name="theme-color" content="#222222" />
     <meta name="description" content="A notepad that keeps your notes stored privately in the browser.">
     <title>Notepad</title>
-    <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link
-      id="fontSS"
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./scss/styles.scss" />
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="apple-touch-icon" href="./images/logo192.png" />
@@ -124,11 +121,12 @@
         <button id="addNoteBtn">Add Note</button>
       </nav>
     </div>
-    <script src="./js/app.ts"></script>
-    <script>
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("./service-worker.js");
-      }
+    <script type="module" src="./js/app.ts"></script>
+    <script type="module">
+      navigator.serviceWorker.register(
+        new URL('service-worker.js', import.meta.url),
+        {type: 'module'}
+      );
     </script>
   </body>
 </html>

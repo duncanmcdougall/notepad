@@ -1,11 +1,18 @@
 html {
-  font-size: 18px;
+  font-size: 16px;
+}
+
+@media screen and (min-width: 600px) {
+  html {
+    font-size: 18px;
+  }
 }
 
 body {
-  background: var(--bg);
+  background-color: var(--bg);
   color: var(--color);
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Fira Code", monospace;
+  font-weight: 500;
   padding: 0;
   overflow: hidden;
   display: flex;
@@ -13,6 +20,7 @@ body {
   align-items: stretch;
   justify-content: stretch;
   height: 100vh;
+  transition: all 0.4s ease;
 }
 
 h1,

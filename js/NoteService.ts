@@ -20,6 +20,17 @@ export const createBlankNote = (): INote => {
   return newNote;
 };
 
+export const createNoteWithText = (text: string): INote => {
+  const newNote = {
+    id: generateNoteID(),
+    content: text,
+    dateCreated: new Date().toISOString(),
+  };
+
+  localStorage.setItem(newNote.id, JSON.stringify(newNote));
+  return newNote;
+};
+
 export const updateNote = (note: INote, content: string) => {
   note.content = content;
   note.dateUpdated = new Date().toISOString();
